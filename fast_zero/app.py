@@ -32,7 +32,6 @@ def read_users():
 
 @app.put("/users/{user_id}", response_model=UserPublic)
 def update_user(user_id: int, user: UserSchema):
-    # Valida se o usuário existe no banco de dados
     if user_id > len(database) or user_id <= 0:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -59,15 +58,10 @@ def delete_user(user_id: int):
     # Retornar mensagem de sucesso
     return {"message": "User deleted"}
 
-@app.get('/users/{id}', response_model=UserPublic)
+
+@app.get("/users/{id}", response_model=UserPublic)
 def get_user(id: int):
-    if id < 1 or id > len(database):  # Valida se o ID está dentro do intervalo válido
-        raise HTTPException(
-            status_code=404, 
-            detail="User not found"
-        )
-    
+    if id < 1 or id > len(database):
+        raise HTTPException(status_code=404, detail="User not found")
+
     return database[id - 1]  # Subtrai 1 para acessar o índice correto
-
-
-
